@@ -1,15 +1,12 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const {validateId} = require('../middlewares/validateId');
+const { validateId } = require("../middleware/validateId");
 
-const {
-  usersList,
-  updateRole
-} = require('../controllers/user.controllers');
+const { usersList, updateRole } = require("../controllers/user.controllers");
 
-const { requireAuth } = require('../middlewares/auth');
+const { auth } = require("../middleware/auth");
 
-router.get('/', requireAuth, usersList);
-router.patch('/:id/role', requireAuth, validateId(), updateRole);
+router.get("/", auth, usersList);
+router.patch("/:id/role", auth, validateId(), updateRole);
 
 module.exports = router;

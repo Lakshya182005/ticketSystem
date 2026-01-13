@@ -1,4 +1,4 @@
-const Category = require('../models/Category');
+const Category = require("../models/Category");
 
 const newCategory = async (req, res) => {
   const category = await Category.create(req.body);
@@ -10,16 +10,14 @@ const categoryList = async (req, res) => {
   res.json(categories);
 };
 const deleteCategory = async (req, res) => {
-    const category = await Category.findByIdAndUpdate(
-        req.params.id,
-        { isActive: false },
-    );
-    res.json(category);
+  const category = await Category.findByIdAndUpdate(req.params.id, {
+    isActive: false,
+  });
+  res.json(category);
 };
 
 module.exports = {
   newCategory,
   categoryList,
-  deleteCategory
+  deleteCategory,
 };
-

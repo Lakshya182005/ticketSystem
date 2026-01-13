@@ -1,22 +1,17 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const User = require('../models/User');
-
-
-
-
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const User = require("../models/User");
 
 const makeToken = (user) => {
   return jwt.sign(
     {
       id: user._id,
-      role: user.role
+      role: user.role,
     },
     process.env.JWT_SECRET,
-    { expiresIn: '7d' }
+    { expiresIn: "7d" }
   );
 };
-
 
 const register = async (req, res) => {
   try {
@@ -24,7 +19,7 @@ const register = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: "User already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -33,7 +28,7 @@ const register = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role: 'customer'
+      role: "customer",
     });
 
     const token = makeToken(user);
@@ -43,14 +38,13 @@ const register = async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        role: user.role
-      }
+        role: user.role,
+      },
     });
   } catch (err) {
-    res.status(500).json({ message: 'Registration failed' });
+    res.status(500).json({ message: "Registration failed" });
   }
 };
-
 
 const login = async (req, res) => {
   try {
@@ -58,13 +52,12 @@ const login = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
-
 
     const check = await bcrypt.compare(password, user.password);
     if (!check) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     const token = makeToken(user);
@@ -73,16 +66,15 @@ const login = async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        role: user.role
-      }
+        role: user.role,
+      },
     });
   } catch (err) {
-    res.status(500).json({ message: 'Login failed' });
+    res.status(500).json({ message: "Login failed" });
   }
 };
 
-
 module.exports = {
   register,
-  login
+  login,
 };
